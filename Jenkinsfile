@@ -1,9 +1,9 @@
 pipeline
 {
-    agent:any
+    agent any
     tools {
         jdk 'Java17'
-        maven 'Maven3'
+        maven 'Maven'
     }
     stages {
           stage("Cleanup Workspace"){
@@ -15,7 +15,7 @@ pipeline
 
           stage("Checkout from SCM"){
               steps {
-                  git branch: 'main', credentialsId: 'Github', url: 'https://github.com/dmancloud/complete-prodcution-e2e-pipeline'
+                  git branch: 'main', credentialsId: 'Github', url: 'https://github.com/mohumadkhald/e2e-CI_CD'
               }
 
           }
