@@ -1,0 +1,21 @@
+apiVersion: argoproj.io/v1alpha1
+kind: Application
+metadata:
+  name: myapp
+  namespace: argocd
+spec:
+  project: default
+  source:
+    repoURL: https://github.com/mohumadkhald/e2e-CI_CD
+    targetRevision: HEAD
+    path: dev
+  destination:
+    # Replace <cluster-name> with the name of your cluster
+    server: https://kubernetes.default.svc
+    namespace: myapp
+  syncPolicy:
+    syncOptions:
+      - CreateNamesspace=true
+    automated:
+      prune: true
+      selfHeal: true
