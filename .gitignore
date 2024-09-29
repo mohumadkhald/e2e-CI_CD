@@ -1,0 +1,52 @@
+# Maven target directory
+/target/
+
+# IntelliJ IDEA project files
+*.iml
+.idea/
+
+# Eclipse project files
+.classpath
+.project
+.settings/
+
+# Visual Studio Code files
+.vscode/*
+!.vscode/settings.json
+!.vscode/tasks.json
+!.vscode/launch.json
+!.vscode/extensions.json
+!.vscode/*.code-snippets
+
+# Local History for Visual Studio Code
+.history/
+
+# Built Visual Studio Code Extensions
+*.vsix
+
+# Logs
+*.log
+
+# Temporary files
+*.tmp
+*.temp
+
+# IDE-specific files
+*.swp
+*.swo
+*~
+
+# Mac OS files
+.DS_Store
+
+# Windows thumbnail cache
+Thumbs.db
+
+# Other common files
+*.jar
+*.war
+*.class
+
+# Application generated files
+*.hprof
+*.stackdump
