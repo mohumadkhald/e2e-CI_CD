@@ -7,7 +7,7 @@ pipeline
     }
 
     environment {
-        APP_NAME = "e2e-pipeline-CI_CD"
+        APP_NAME = "e2e-pipeline-ci_cd"
         RELEASE = "1.0.0"
         DOCKER_USER = "mohumadkhald"
         DOCKER_PASS = 'Dockerhub'
