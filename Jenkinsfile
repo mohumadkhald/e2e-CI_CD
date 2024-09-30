@@ -87,6 +87,7 @@ pipeline
                       }
                   }
               }
+          }
 
 
           stage("Trivy Scan") {
