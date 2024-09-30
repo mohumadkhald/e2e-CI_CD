@@ -5,7 +5,9 @@ pipeline
         jdk 'Java17'
         maven 'Maven'
     }
-
+    parameters {
+      booleanParam(name: "executeTest", defaultValue: true, description: "Default will Make Test")
+    }
     environment {
         APP_NAME = "e2e-pipeline-ci_cd"
         RELEASE = "1.0.0"
@@ -37,11 +39,21 @@ pipeline
           }
 
           stage("Test App"){
+             when {
+               expression {
+                 params.executeTest
+               }
+             }
               steps {
                   sh 'mvn test'
               }
           }
           stage("Sonarqube Analysis") {
+              when {
+                expression {
+                  params.executeTest
+                }
+              }
               steps {
                   script {
                       withSonarQubeEnv(credentialsId: 'sonarqube-token') {
@@ -52,6 +64,11 @@ pipeline
           }
 
           stage("Quality Gate") {
+              when {
+                expression {
+                  params.executeTest
+                }
+              }
               steps {
                   script {
                       waitForQualityGate abortPipeline: false, credentialsId: 'jenkins-sonarqube-token'
