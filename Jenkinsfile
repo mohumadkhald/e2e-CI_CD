@@ -113,7 +113,7 @@ pipeline
                     sh "docker rmi ${IMAGE_NAME}:${IMAGE_TAG} || true"
                     sh "docker rmi ${IMAGE_NAME}:latest || true"
 
-                    // Clean up any dangling images
+                    // Clean up any dangling images none image
                     sh 'docker image prune -f'
                 }
             }
