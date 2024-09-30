@@ -79,26 +79,32 @@ pipeline
           stage("Build & Push Docker Image") {
               steps {
                   script {
-                      docker.withRegistry('',DOCKER_PASS) {
-                          docker_image = docker.build "${IMAGE_NAME}"
-                      }
-
-                      docker.withRegistry('',DOCKER_PASS) {
-                          docker_image.push("${IMAGE_TAG}")
-                          docker_image.push('latest')
+                      docker.withRegistry('', DOCKER_PASS) {
+                          // Build the image and tag it with both the versioned tag and 'latest'
+                          def dockerImage = docker.build("${IMAGE_NAME}:${IMAGE_TAG}")
+                          dockerImage.push("${IMAGE_TAG}")
+                          dockerImage.push('latest')
                       }
                   }
               }
-          }
+
 
           stage("Trivy Scan") {
               steps {
                   script {
-                    sh ('docker run -v /var/run/docker.sock:/var/run/docker.sock aquasec/trivy image ${IMAGE_NAME} --no-progress --scanners vuln  --exit-code 0 --severity HIGH,CRITICAL --format table')
+                      sh '''
+                      docker pull aquasec/trivy:latest
+                      docker run --rm \
+                          -v /var/run/docker.sock:/var/run/docker.sock \
+                          -v trivy-cache:/root/.cache/ \
+                          aquasec/trivy image ${IMAGE_NAME}:${IMAGE_TAG} \
+                          --no-progress --scanners vuln \
+                          --exit-code 0 --severity HIGH,CRITICAL --format table
+                      '''
                   }
               }
+          }
 
-        }
 
         stage ('Cleanup Artifacts') {
             steps {
