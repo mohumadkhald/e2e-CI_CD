@@ -80,9 +80,10 @@ pipeline
               steps {
                   script {
                       docker.withRegistry('', DOCKER_PASS) {
-                          // Build the image and tag it with both the versioned tag and 'latest'
+                          // Build the image once and tag it with both the versioned tag and 'latest'
                           def dockerImage = docker.build("${IMAGE_NAME}:${IMAGE_TAG}")
                           dockerImage.push("${IMAGE_TAG}")
+                          dockerImage.tag("${IMAGE_NAME}:latest") // Explicitly tag it as 'latest'
                           dockerImage.push('latest')
                       }
                   }
