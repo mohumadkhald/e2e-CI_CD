@@ -80,16 +80,15 @@ pipeline
               steps {
                   script {
                       docker.withRegistry('', DOCKER_PASS) {
-                          // Build the image once and tag it with both the versioned tag and 'latest'
+                          // Build the image and tag it with both the versioned tag and 'latest'
                           def dockerImage = docker.build("${IMAGE_NAME}:${IMAGE_TAG}")
                           dockerImage.push("${IMAGE_TAG}")
-                          // Explicitly tag it as 'latest'
-                          dockerImage.tag("${IMAGE_NAME}:latest")
                           dockerImage.push('latest')
                       }
                   }
               }
           }
+
 
           stage("Trivy Scan") {
               steps {
@@ -107,16 +106,18 @@ pipeline
               }
           }
 
-
         stage ('Cleanup Artifacts') {
             steps {
                 script {
-                    sh "docker rmi ${IMAGE_NAME}:${IMAGE_TAG}"
-                    sh "docker rmi ${IMAGE_NAME}:latest"
+                    // Remove the versioned and 'latest' images
+                    sh "docker rmi ${IMAGE_NAME}:${IMAGE_TAG} || true"
+                    sh "docker rmi ${IMAGE_NAME}:latest || true"
+
+                    // Clean up any dangling images
+                    sh 'docker image prune -f'
                 }
             }
         }
-
 
         stage("Trigger CD Pipeline") {
             steps {
